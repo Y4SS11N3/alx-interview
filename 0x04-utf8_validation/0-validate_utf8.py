@@ -11,27 +11,19 @@ def validUTF8(data):
     :return: True if data is a valid UTF-8 encoding, else False
     """
     n_bytes = 0
-    mask1 = 1 << 7
-    mask2 = 1 << 6
-
     for num in data:
-        byte = num & 0xFF
-
+        binary_rep = format(num, '#010b')[-8:]
         if n_bytes == 0:
-            while byte & mask1:
+            for bit in binary_rep:
+                if bit == '0':
+                    break
                 n_bytes += 1
-                mask1 = mask1 >> 1
-
             if n_bytes == 0:
                 continue
-
             if n_bytes == 1 or n_bytes > 4:
                 return False
-
         else:
-            if not (byte & mask1 and not (byte & mask2)):
+            if not (binary_rep[0] == '1' and binary_rep[1] == '0'):
                 return False
-
         n_bytes -= 1
-
     return n_bytes == 0
