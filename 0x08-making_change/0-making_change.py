@@ -18,16 +18,15 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    # Initialize a list to store the minimum coins needed for each amount
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    # Sort coins in descending order
+    coins.sort(reverse=True)
 
-    # Iterate through all amounts from 1 to total
-    for i in range(1, total + 1):
-        # Try each coin
-        for coin in coins:
-            if coin <= i:
-                dp[i] = min(dp[i], dp[i - coin] + 1)
+    count = 0
+    for coin in coins:
+        while total >= coin:
+            total -= coin
+            count += 1
+        if total == 0:
+            return count
 
-    # If dp[total] is still infinity, it means we can't make the amount
-    return dp[total] if dp[total] != float('inf') else -1
+    return -1
